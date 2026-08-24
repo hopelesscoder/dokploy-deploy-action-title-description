@@ -18,6 +18,13 @@ inputs:
     description: "Type of Dokploy service (compose or application)"
     required: false
     default: "application"
+  title:
+    description: "Title of the deploy, to be shown in dokploy deployments"
+    required: false
+    default: "Deploy via github action"
+  description:
+    description: "Description of the deploy, to be shown in dokploy deployments"
+    required: false
 
 runs:
   using: "composite"
@@ -41,14 +48,22 @@ runs:
         DOKPLOY_URL: ${{ inputs.dokploy_url }}
         DOKPLOY_API_TOKEN: ${{ inputs.api_token }}
         DOKPLOY_APPLICATION_ID: ${{ inputs.application_id }}
+        DOKPLOY_TITLE: ${{ inputs.title }}
+        DOKPLOY_DESCRIPTION: ${{ inputs.description }}
       run: |
+        if [ -n "$DOKPLOY_DESCRIPTION" ]; then
+          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" }"
+        else
+          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
+        fi
+
         response=$(curl -X POST \
           "$DOKPLOY_URL/api/${{ inputs.service_type }}.deploy" \
           -H 'accept: application/json' \
           -H "x-api-key:${DOKPLOY_API_TOKEN}" \
           -H 'Content-Type: application/json' \
           -H "Authorization: Bearer $DOKPLOY_AUTH_TOKEN" \
-          -d "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\"}" \
+          -d "$BODY" \
           -w "%{http_code}" \
           -o /dev/null \
           -s)

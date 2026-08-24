@@ -2,6 +2,8 @@
 
 This GitHub Action triggers a deployment on your Dokploy instance as part of a CI/CD pipeline.
 
+> **Note**: This is an updated fork of the original `benbristow/dokploy-deploy-action` to add title and description to the dokploy API call.
+
 ---
 
 ## Inputs
@@ -30,6 +32,16 @@ Example: `https://dokploy.example.com`
 
 **Default** `application`
 
+### `title`
+
+**Optional** Title of the deploy, to be shown in dokploy deployments
+
+**Default** `Deploy via github action`
+
+### `description`
+
+**Optional** description of the deploy, to be shown in dokploy deployments
+
 ## Usage
 
 Include this action in your GitHub workflow file like this:
@@ -53,6 +65,8 @@ jobs:
         application_id: ${{ secrets.DOKPLOY_APPLICATION_ID }}
         dokploy_url: ${{ secrets.DOKPLOY_URL }}
         service_type: application
+        title: Deploy using a github action
+        description: Trying to implement CI/CD
 ```
 Note: If you encounter persistent 403 errors, it might be related to Cloudflare bot detection blocking the requests, so it’s worth checking on that separately.
 
