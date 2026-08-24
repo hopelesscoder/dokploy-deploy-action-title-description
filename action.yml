@@ -58,6 +58,8 @@ runs:
           BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" }"
         elif [ "$DOKPLOY_DESCRIPTION" ]; then
           BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
+        fi
+
 
         response=$(curl -X POST \
           "$DOKPLOY_URL/api/${{ inputs.service_type }}.deploy" \
