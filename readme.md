@@ -32,13 +32,13 @@ Example: `https://dokploy.example.com`
 
 **Default** `application`
 
-### `title`
+### `deploy_title`
 
 **Optional** Title of the deploy, to be shown in dokploy deployments
 
 **Default** `Deploy via github action`
 
-### `description`
+### `deploy_description`
 
 **Optional** description of the deploy, to be shown in dokploy deployments
 
@@ -65,8 +65,8 @@ jobs:
         application_id: ${{ secrets.DOKPLOY_APPLICATION_ID }}
         dokploy_url: ${{ secrets.DOKPLOY_URL }}
         service_type: application
-        title: Deploy using a github action
-        description: Trying to implement CI/CD
+        deploy_title: Deploy using a github action
+        deploy_description: Trying to implement CI/CD
 ```
 Note: If you encounter persistent 403 errors, it might be related to Cloudflare bot detection blocking the requests, so it’s worth checking on that separately.
 

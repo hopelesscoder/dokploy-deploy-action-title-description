@@ -18,11 +18,11 @@ inputs:
     description: "Type of Dokploy service (compose or application)"
     required: false
     default: "application"
-  title:
+  deploy_title:
     description: "Title of the deploy, to be shown in dokploy deployments"
     required: false
     default: "Deploy via github action"
-  description:
+  deploy_description:
     description: "Description of the deploy, to be shown in dokploy deployments"
     required: false
 
@@ -48,14 +48,17 @@ runs:
         DOKPLOY_URL: ${{ inputs.dokploy_url }}
         DOKPLOY_API_TOKEN: ${{ inputs.api_token }}
         DOKPLOY_APPLICATION_ID: ${{ inputs.application_id }}
-        DOKPLOY_TITLE: ${{ inputs.title }}
-        DOKPLOY_DESCRIPTION: ${{ inputs.description }}
+        DOKPLOY_TITLE: ${{ inputs.deploy_title }}
+        DOKPLOY_DESCRIPTION: ${{ inputs.deploy_description }}
       run: |
-        if [ -n "$DOKPLOY_DESCRIPTION" ]; then
-          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" }"
-        else
+        if [ -n "$DOKPLOY_TITLE" ] && [ -n "$DOKPLOY_DESCRIPTION" ]; then
+          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\"}"
+        elif [ "$DOKPLOY_TITLE" ] && [ "$DOKPLOY_DESCRIPTION" ]; then
           BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
-        fi
+        elif [ "$DOKPLOY_TITLE" ]; then
+          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" }"
+        elif [ "$DOKPLOY_DESCRIPTION" ]; then
+          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
 
         response=$(curl -X POST \
           "$DOKPLOY_URL/api/${{ inputs.service_type }}.deploy" \
