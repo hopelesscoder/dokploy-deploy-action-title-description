@@ -36,8 +36,6 @@ Example: `https://dokploy.example.com`
 
 **Optional** Title of the deploy, to be shown in dokploy deployments
 
-**Default** `Deploy via github action`
-
 ### `deploy_description`
 
 **Optional** description of the deploy, to be shown in dokploy deployments

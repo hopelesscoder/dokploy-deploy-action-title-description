@@ -21,7 +21,6 @@ inputs:
   deploy_title:
     description: "Title of the deploy, to be shown in dokploy deployments"
     required: false
-    default: "Deploy via github action"
   deploy_description:
     description: "Description of the deploy, to be shown in dokploy deployments"
     required: false
