@@ -51,13 +51,13 @@ runs:
         DOKPLOY_DESCRIPTION: ${{ inputs.deploy_description }}
       run: |
         if [ -n "$DOKPLOY_TITLE" ] && [ -n "$DOKPLOY_DESCRIPTION" ]; then
-          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\"}"
+          REQ_BODY="{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\"}"
         elif [ "$DOKPLOY_TITLE" ] && [ "$DOKPLOY_DESCRIPTION" ]; then
-          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
+          REQ_BODY="{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
         elif [ "$DOKPLOY_TITLE" ]; then
-          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" }"
+          REQ_BODY="{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"title\": \"$DOKPLOY_TITLE\" }"
         elif [ "$DOKPLOY_DESCRIPTION" ]; then
-          BODY= "{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
+          REQ_BODY="{\"${{ inputs.service_type }}Id\": \"$DOKPLOY_APPLICATION_ID\" , \"description\": \"$DOKPLOY_DESCRIPTION\" }"
         fi
 
 
@@ -67,7 +67,7 @@ runs:
           -H "x-api-key:${DOKPLOY_API_TOKEN}" \
           -H 'Content-Type: application/json' \
           -H "Authorization: Bearer $DOKPLOY_AUTH_TOKEN" \
-          -d "$BODY" \
+          -d "$REQ_BODY" \
           -w "%{http_code}" \
           -o /dev/null \
           -s)
